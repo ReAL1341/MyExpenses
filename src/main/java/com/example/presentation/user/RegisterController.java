@@ -38,7 +38,7 @@ public class RegisterController {
 	
 	
 	@ExceptionHandler(UseCaseException.class)
-	public RegisterExceptionJsonBean DomainExceptionHandler(HttpServletRequest request, UseCaseException e) {
+	public RegisterExceptionJsonBean UseCaseExceptionHandler(HttpServletRequest request, UseCaseException e) {
 		RegisterExceptionJsonBean responseBean = new RegisterExceptionJsonBean();
 		responseBean.setEmail(request.getParameter("email"));
 		responseBean.setMessage(e.getMessage());
