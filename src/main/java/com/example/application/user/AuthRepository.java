@@ -1,4 +1,4 @@
-package com.example.application.auth;
+package com.example.application.user;
 
 import com.example.domain.user.UserId;
 

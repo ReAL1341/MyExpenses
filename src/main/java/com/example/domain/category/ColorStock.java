@@ -1,4 +1,4 @@
-package com.example.domain.user;
+package com.example.domain.category;
 
 import java.util.ArrayList;
 import java.util.Arrays;

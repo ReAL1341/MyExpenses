@@ -5,7 +5,7 @@ import java.io.Serializable;
 import lombok.Data;
 
 @Data
-public class RegisterExceptionJsonBean implements Serializable {
+public class AuthErrorBean implements Serializable {
 	
 	
 	private String email;

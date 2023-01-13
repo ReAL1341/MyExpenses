@@ -1,4 +1,4 @@
-package com.example.domain.user;
+package com.example.domain.category;
 
 import java.util.UUID;
 
@@ -7,14 +7,13 @@ import lombok.Value;
 
 @Value
 @RequiredArgsConstructor
-public class UserId {
+public class CategoryId {
 	
 	
 	private final String value;
 	
 	
-	
-	public UserId() {
+	public CategoryId() {
 		this.value = UUID.randomUUID().toString();
 	}
 	

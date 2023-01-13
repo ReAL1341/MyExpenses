@@ -9,36 +9,40 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.domain.user.Category;
-import com.example.domain.user.User;
+import com.example.domain.category.Category;
+import com.example.domain.category.CategoryId;
+import com.example.domain.category.CategoryList;
+import com.example.domain.category.CategoryRepository;
 import com.example.domain.user.UserId;
-import com.example.domain.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class UserMysqlDataSource implements UserRepository {
+public class CategoryMysqlDataSource implements CategoryRepository {
 	
 	
 	private final JdbcTemplate jdbcTemplate;
 	
 	
 	@Transactional
-	public void save(User user) {
+	public void save(CategoryList categoryList) {
 		String deleteCategoriesQuery = "DELETE FROM myexpenses_categories WHERE user_id = ?";
 		String insertCategoryQuery = "INSERT INTO myexpenses_categories"
-				+ "(category_id, category_name, user_id) VALUES(0, ?, ?)";
+				+ "(category_id, category_name, user_id) VALUES(?, ?, ?)";
 		
-		this.jdbcTemplate.update(deleteCategoriesQuery, user.getUserId().getValue());
-		for(Category category: user.getCategories()) {
-			this.jdbcTemplate.update(insertCategoryQuery, category.getCategoryName(), user.getUserId().getValue());
+		String userId = categoryList.getUserId().getValue();
+		this.jdbcTemplate.update(deleteCategoriesQuery, userId);
+		for(Category category: categoryList.all()) {
+			String categoryId = category.getCategoryId().getValue();
+			String categoryName = category.getCategoryName();
+			this.jdbcTemplate.update(insertCategoryQuery, categoryId, categoryName, userId);
 		}
 	}
 	
 	
-	public User findByUserId(UserId userId) {
-		User user = new User(userId);
+	public CategoryList findByUserId(UserId userId) {
+		CategoryList categoryList = new CategoryList(userId);
 		String selectCategoriesQuery = "SELECT myexpenses_categories.category_name FROM myexpenses_categories"
 				+ " WHERE myexpenses_categories.user_id = ?";
 		List<Map<String, Object>> records = this.jdbcTemplate.queryForList(selectCategoriesQuery, userId.getValue());
@@ -54,13 +58,13 @@ public class UserMysqlDataSource implements UserRepository {
 			Collections.sort(records, comparator);
 			
 			for(Map<String, Object> record: records) {
-				user.add((String) record.get("category_name"));
-			}
-			
-			return user;
-		}else {
-			return null;
+				CategoryId categoryId = new CategoryId((String) record.get("category_id"));
+				String categoryName = (String) record.get("category_name");
+				categoryList.add(categoryId, categoryName);
+			}	
 		}
+		
+		return categoryList;
 	}
 	
 	

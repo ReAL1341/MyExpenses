@@ -6,8 +6,8 @@ import java.util.Map;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.example.application.auth.AuthRepository;
-import com.example.application.auth.AuthToken;
+import com.example.application.user.AuthRepository;
+import com.example.application.user.AuthToken;
 import com.example.domain.user.UserId;
 
 import lombok.RequiredArgsConstructor;

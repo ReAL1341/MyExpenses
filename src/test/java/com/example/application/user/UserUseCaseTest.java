@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import com.example.application.UseCaseException;
 import com.example.application.auth.AuthRepository;
 import com.example.application.auth.AuthToken;
-import com.example.domain.user.UserRepository;
+import com.example.domain.category.UserRepository;
 import com.example.infrastructure.datasource.test.AuthTestDataSource;
 import com.example.infrastructure.datasource.test.UserTestDataSource;
 

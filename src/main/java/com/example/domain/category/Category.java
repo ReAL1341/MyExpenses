@@ -1,4 +1,4 @@
-package com.example.domain.user;
+package com.example.domain.category;
 
 import lombok.Value;
 
@@ -6,6 +6,7 @@ import lombok.Value;
 public class Category {
 	
 	
+	private CategoryId categoryId;
 	private String categoryName;
 	private String colorCode;
 	

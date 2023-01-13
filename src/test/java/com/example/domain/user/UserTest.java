@@ -8,6 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.example.domain.DomainException;
+import com.example.domain.category.User;
+import com.example.domain.category.UserId;
 
 class UserTest {
 	
