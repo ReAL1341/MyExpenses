@@ -17,8 +17,7 @@ public class UserUseCase {
 	
 	
 	/**
-	 * 認証情報の登録とユーザーの初期情報の登録・取得を行う。
-	 * 処理途中で問題が発生した場合は自動でロールバックを行う。
+	 * 認証情報の登録を行う。
 	 * @return String ユーザーID
 	 * @throws UseCaseException 認証情報がすでに登録されていた場合
 	 */
@@ -37,7 +36,7 @@ public class UserUseCase {
 	
 	
 	/**
-	 * 認証情報からユーザーを取得する。
+	 * 認証情報からユーザーIDを取得する。
 	 * @return String ユーザーID
 	 * @throws UseCaseException 該当する認証情報が登録されていなかった場合
 	 */

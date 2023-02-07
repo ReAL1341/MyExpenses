@@ -1,6 +1,7 @@
 package com.example.presentation.user;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,31 +22,25 @@ public class AuthController {
 	private final UserUseCase userUseCase;
 	
 	
+	/*
+	 * 認証情報の登録を行う。
+	 */
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
-	public void register(HttpServletRequest request) throws UseCaseException {
-		AuthForm form = new AuthForm(request);
+	public String register(@RequestBody AuthForm form, HttpServletRequest request) throws UseCaseException {
 		AuthToken authToken = form.createToken();
 		String userId = this.userUseCase.register(authToken);
 		
 		HttpSession session = request.getSession();
 		session.setAttribute("userId", userId);
-	}
-	
-	
-	/**
-	 * @return セッションにユーザーIDが存在しない場合nullを返す
-	 */
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String autoLogin(HttpServletRequest request) {
-		HttpSession session = request.getSession();
-		String userId = (String) session.getAttribute("userId");
 		return userId;
 	}
+		
 	
-	
+	/**
+	 * 認証情報からユーザーIDを取得する。
+	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String login(HttpServletRequest request) throws UseCaseException {
-		AuthForm form = new AuthForm(request);
+	public String login(@RequestBody AuthForm form, HttpServletRequest request) throws UseCaseException {
 		AuthToken authToken = form.createToken();
 		String userId = this.userUseCase.authenticate(authToken);
 		
@@ -58,8 +53,7 @@ public class AuthController {
 	@ExceptionHandler(UseCaseException.class)
 	public AuthErrorBean UseCaseExceptionHandler(HttpServletRequest request, UseCaseException e) {
 		AuthErrorBean responseBean = new AuthErrorBean();
-		responseBean.setEmail(request.getParameter("email"));
-		responseBean.setMessage(e.getMessage());
+		responseBean.addMessage(e.getMessage());
 		return responseBean;
 	}
 	
