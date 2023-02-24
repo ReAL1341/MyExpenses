@@ -47,7 +47,7 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props) {
+  setup(props, { emit }) {
     const email = ref("")
     const password = ref("")
     const updateEmail = (newEmail) => {
@@ -63,11 +63,10 @@ export default defineComponent({
         email: email.value,
         password: password.value,
       }).then(res => {
-        if("messages" in res.data){
+        if(res.data.messages.length > 0) {
           errorMessages.value = res.data.messages
         }else {
-          // 成功したときの処理
-          console.log('ok')
+          emit("login", res.data.userId)
         }
       })
     }

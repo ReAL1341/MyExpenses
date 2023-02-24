@@ -1,4 +1,4 @@
-package com.example.application.category;
+package com.example.application.param;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

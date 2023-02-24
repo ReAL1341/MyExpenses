@@ -16,9 +16,12 @@ import ErrorMessageAtomComponent from "./components/atoms/ErrorMessageAtomCompon
 =================== */
 import AuthFormTemplateComponent from "./components/templates/AuthFormTemplateComponent.vue"
 
+/* ===================
+        views
+=================== */
+import AuthViewComponent from "./components/views/AuthViewComponent.vue"
+import HomeViewComponent from "./components/views/HomeViewComponent.vue"
 
-
-import HomeTemplate from "./components/home/HomeTemplate.vue"
 
 const components = [
     /* ===================
@@ -43,10 +46,16 @@ const components = [
         name: "auth-form-template-component",
         module: AuthFormTemplateComponent,
     },
-
+    /* ===================
+            views
+    =================== */
     {
-        name: "home-template",
-        module: HomeTemplate,
+        name: "auth-view-component",
+        module: AuthViewComponent,
+    },
+    {
+        name: "home-view-component",
+        module: HomeViewComponent,
     }
 ]
 

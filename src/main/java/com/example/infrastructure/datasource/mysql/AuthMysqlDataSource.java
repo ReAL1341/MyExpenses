@@ -20,12 +20,14 @@ public class AuthMysqlDataSource implements AuthRepository {
 	private final JdbcTemplate jdbcTemplate;
 	
 	
+	@Override
 	public void save(AuthToken authToken, UserId userId) {
 		String insertAuthQuery = "INSERT INTO auth_tokens(auth_token, user_id) VALUES(?, ?)";
 		this.jdbcTemplate.update(insertAuthQuery, authToken.getValue(), userId.getValue());
 	}
 	
 	
+	@Override
 	public UserId findByAuthToken(AuthToken authToken) {
 		String selectAuthQuery = "SELECT auth_tokens.user_id FROM auth_tokens WHERE auth_tokens.auth_token = ?";
 		List<Map<String, Object>> records = this.jdbcTemplate.queryForList(selectAuthQuery, authToken.getValue());

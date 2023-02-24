@@ -1,4 +1,4 @@
-package com.example.presentation.user;
+package com.example.presentation.form;
 
 import com.example.application.user.AuthToken;
 
@@ -8,8 +8,8 @@ import lombok.Data;
 public class AuthForm {
 	
 	
-	private final String email;
-	private final String password;
+	private String email;
+	private String password;
 	
 	
 	public AuthToken createToken() {

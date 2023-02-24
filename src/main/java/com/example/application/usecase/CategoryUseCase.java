@@ -1,4 +1,4 @@
-package com.example.application.category;
+package com.example.application.usecase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.application.dto.CategoryDto;
+import com.example.application.param.CategoryParam;
 import com.example.domain.DomainException;
 import com.example.domain.category.Category;
 import com.example.domain.category.CategoryId;
@@ -27,7 +29,7 @@ public class CategoryUseCase {
 	public void createNewCategory(CategoryParam param) throws DomainException {
 		UserId userId = new UserId(param.getUserId());
 		CategoryList categoryList = this.categoryRepository.findByUserId(userId);
-		CategoryId categoryId = new CategoryId();
+		CategoryId categoryId = CategoryId.issue();
 		categoryList.register(categoryId, param.getCategoryName());
 		this.categoryRepository.save(categoryList);
 	}

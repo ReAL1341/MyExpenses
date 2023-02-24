@@ -59,4 +59,7 @@ public class CategoryList {
 	}
 	
 	
+	public Category findByCategoryId(CategoryId categoryId) {}
+	
+	
 }

@@ -4,73 +4,87 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import com.example.application.UseCaseException;
-import com.example.application.auth.AuthRepository;
-import com.example.application.auth.AuthToken;
-import com.example.domain.category.UserRepository;
 import com.example.infrastructure.datasource.test.AuthTestDataSource;
-import com.example.infrastructure.datasource.test.UserTestDataSource;
 
 class UserUseCaseTest {
 	
 	
 	private static UserUseCase userUseCase;
+	private static AuthToken testAuthToken;
 	
 	
-	@BeforeEach
-	void setUp() throws Exception {
-		AuthRepository authRepository = new AuthTestDataSource();
-		UserRepository userRepository = new UserTestDataSource();
-		userUseCase = new UserUseCase(authRepository, userRepository);
+	@BeforeAll
+	static void setUp() throws Exception {
+		testAuthToken = new AuthToken("test@test", "testpassword");
 	}
 	
 	
-	@Test
-	void registerUserTest() throws Exception {
-		AuthToken authToken = new AuthToken("test@test", "testpassword");
-		UserDto userDto = userUseCase.register(authToken);
-		assertThat(userDto.getCategories().get(0).getCategoryName(), is("食費"));
-		assertThat(userDto.getCategories().get(1).getCategoryName(), is("交通費"));
-		assertThat(userDto.getCategories().get(2).getCategoryName(), is("光熱費"));
-		assertThat(userDto.getCategories().get(3).getCategoryName(), is("娯楽費"));
-	}
+	@Nested
+	class registerTest {
 	
-	
-	@Test
-	void registerDuplicatedUserTest() throws Exception {
-		AuthToken authToken = new AuthToken("test@test", "testpassword");
-		userUseCase.register(authToken);
+		@BeforeAll
+		static void setUp() throws Exception {
+			AuthRepository authRepository = new AuthTestDataSource();
+			userUseCase = new UserUseCase(authRepository);
+		}
 		
-		AuthToken duplicatedAuthToken = new AuthToken("test@test", "testpassword");
-		assertThrows(UseCaseException.class, () -> userUseCase.register(duplicatedAuthToken));
+		
+		@Test
+		@DisplayName("ユーザー情報を新規登録するテスト")
+		void registerUserTest() throws Exception {
+			String userId = userUseCase.register(testAuthToken);
+			assertThat(userId, notNullValue());
+		}
+		
+		
+		@Test
+		@DisplayName("重複するユーザー情報の登録時に、例外を発生させるテスト")
+		void registerDuplicatedUserTest() throws Exception {
+			assertThrows(UseCaseException.class, () -> userUseCase.register(testAuthToken));
+		}
+		
 	}
 	
 	
-	@Test
-	void loginTest() throws Exception {
-		AuthToken authToken = new AuthToken("test@test", "testpassword");
-		userUseCase.register(authToken);
+	@Nested
+	class authenticateTest {
 		
-		UserDto userDto = userUseCase.login(authToken);
-		assertThat(userDto.getCategories().get(0).getCategoryName(), is("食費"));
-		assertThat(userDto.getCategories().get(1).getCategoryName(), is("交通費"));
-		assertThat(userDto.getCategories().get(2).getCategoryName(), is("光熱費"));
-		assertThat(userDto.getCategories().get(3).getCategoryName(), is("娯楽費"));
-	}
-	
-	
-	@Test
-	void failToLoginTest() throws Exception {
-		AuthToken authToken = new AuthToken("test@test", "testpassword");
-		userUseCase.register(authToken);
+		@BeforeAll
+		static void setUp() throws Exception {
+			AuthRepository authRepository = new AuthTestDataSource();
+			userUseCase = new UserUseCase(authRepository);
+			userUseCase.register(testAuthToken);
+		}
 		
-		AuthToken incorrectEmailAuthToken = new AuthToken("testtest@test", "testpassword");
-		AuthToken incorrectPasswordAuthToken = new AuthToken("test@test", "testtestpassword");
-		assertThrows(UseCaseException.class, () -> userUseCase.login(incorrectEmailAuthToken));
-		assertThrows(UseCaseException.class, () -> userUseCase.login(incorrectPasswordAuthToken));	
+		@Test
+		@DisplayName("ユーザー情報の認証を行うテスト")
+		void correctUserTest() throws Exception {
+			String userId = userUseCase.authenticate(testAuthToken);
+			assertThat(userId, notNullValue());
+		}
+		
+		
+		@Test
+		@DisplayName("メールアドレスが正しくないときに、認証を失敗にするテスト")
+		void incorrectEmailUserTest() throws Exception {
+			AuthToken incorrectEmailAuthToken = new AuthToken("testtest@test", "testpassword");
+			assertThrows(UseCaseException.class, () -> userUseCase.authenticate(incorrectEmailAuthToken));
+		}
+		
+		
+		@Test
+		@DisplayName("パスワードが正しくないときに、認証を失敗にするテスト")
+		void incorrectPasswordUserTest() throws Exception {
+			AuthToken incorrectPasswordAuthToken = new AuthToken("test@test", "testtestpassword");
+			assertThrows(UseCaseException.class, () -> userUseCase.authenticate(incorrectPasswordAuthToken));	
+		}
+		
 	}
 	
 	

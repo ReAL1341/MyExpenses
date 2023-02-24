@@ -1,4 +1,4 @@
-package com.example.application.category;
+package com.example.application.dto;
 
 import com.example.domain.category.Category;
 

@@ -26,6 +26,7 @@ public class CategoryMysqlDataSource implements CategoryRepository {
 	
 	
 	@Transactional
+	@Override
 	public void save(CategoryList categoryList) {
 		String deleteCategoriesQuery = "DELETE FROM myexpenses_categories WHERE user_id = ?";
 		String insertCategoryQuery = "INSERT INTO myexpenses_categories"
@@ -41,6 +42,7 @@ public class CategoryMysqlDataSource implements CategoryRepository {
 	}
 	
 	
+	@Override
 	public CategoryList findByUserId(UserId userId) {
 		CategoryList categoryList = new CategoryList(userId);
 		String selectCategoriesQuery = "SELECT myexpenses_categories.category_name FROM myexpenses_categories"

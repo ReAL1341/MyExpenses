@@ -17,7 +17,7 @@ public class UserUseCase {
 	
 	
 	/**
-	 * 認証情報の登録を行う。
+	 * ユーザー情報の登録を行う。
 	 * @return String ユーザーID
 	 * @throws UseCaseException 認証情報がすでに登録されていた場合
 	 */
@@ -25,7 +25,7 @@ public class UserUseCase {
 	public String register(AuthToken authToken) throws UseCaseException {
 		UserId userId = this.authRepository.findByAuthToken(authToken);
 		if(userId == null) {
-			userId = new UserId();
+			userId = UserId.issue();
 			this.authRepository.save(authToken, userId);
 			
 			return userId.getValue();
@@ -36,9 +36,9 @@ public class UserUseCase {
 	
 	
 	/**
-	 * 認証情報からユーザーIDを取得する。
+	 * ユーザー情報の認証を行う。
 	 * @return String ユーザーID
-	 * @throws UseCaseException 該当する認証情報が登録されていなかった場合
+	 * @throws UseCaseException 該当するユーザー情報が登録されていなかった場合
 	 */
 	public String authenticate(AuthToken authToken) throws UseCaseException {
 		UserId userId = this.authRepository.findByAuthToken(authToken);

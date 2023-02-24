@@ -2,19 +2,21 @@ package com.example.domain.item;
 
 import java.util.UUID;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 
-@Value
+
 @RequiredArgsConstructor
+@Getter
 public class ItemId {
 	
 	
 	private final String value;
 	
 	
-	public ItemId() {
-		this.value = UUID.randomUUID().toString();
+	public static ItemId issue() {
+		String newItemId = UUID.randomUUID().toString();
+		return new ItemId(newItemId);
 	}
 	
 	
